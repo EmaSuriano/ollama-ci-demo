@@ -26,7 +26,12 @@ jobs:
       - name: Run LLM
         run: |
           DATE=$(date +'%Y-%m-%d')
-          ollama run llama3.2 'Give me an inspirational phrase' > "./src/phrases/$DATE.md"
+          FILE_PATH="./src/phrases/$DATE.md"
+
+          # Avoid running the command if the file already exists
+          if [ ! -f FILE_PATH ]; then
+          ollama run llama3.2 'Give me an inspirational phrase' > FILE_PATH
+          fi
 
       - uses: stefanzweifel/git-auto-commit-action@v5
 
