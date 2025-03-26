@@ -1,48 +1,141 @@
-# Astro Starter Kit: Basics
+# Daily Motivation with Ollama CI Demo
 
-```sh
-yarn create astro@latest -- --template basics
+This repository demonstrates how to integrate [Ollama](https://ollama.com/) into GitHub Actions to automatically generate and publish daily motivational phrases to an Astro website.
+
+## 🌟 Project Overview
+
+Every day at midnight UTC, this project:
+
+1. Uses GitHub Actions to run Ollama with the Llama3.2 model
+2. Generates a new inspirational phrase
+3. Saves it to the repository
+4. Builds and deploys an updated Astro website showcasing all phrases
+
+Visit the [live demo site](https://emasuriano.github.io/ollama-ci-demo) to see today's motivational phrase.
+
+## ⚙️ How It Works
+
+### GitHub Actions Workflow
+
+The entire process is orchestrated through GitHub Actions, making it fully automated:
+
+```yml
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at midnight UTC
+
+jobs:
+  ollama:
+    # First job: Generate today's phrase with Ollama
+    # ...
+
+  build:
+    # Second job: Build the Astro site
+    # ...
+
+  deploy:
+    # Third job: Deploy to GitHub Pages
+    # ...
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+![Visual workflow](https://github.com/user-attachments/assets/5ebba5fe-4a77-4375-8a43-b5946dab0475)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### The Process in Detail
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+1. **Phrase Generation Job** (`ollama`):
 
-## 🚀 Project Structure
+   - Installs Ollama on the GitHub Actions runner
+   - Runs the Llama3.2 model with the prompt "Give me an inspirational phrase"
+   - Saves the output to a Markdown file with the current date
+   - Commits the new file to the repository
 
-Inside of your Astro project, you'll see the following folders and files:
+2. **Build Job** (`build`):
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+   - Runs after the ollama job completes successfully
+   - Checks out the updated repository
+   - Builds the Astro site with all phrases
+
+3. **Deploy Job** (`deploy`):
+   - Runs after the build job completes
+   - Deploys the built site to GitHub Pages
+
+## 🚀 Features
+
+- **Fully Automated**: No manual intervention needed
+- **Daily Updates**: Fresh content every day
+- **Simple Architecture**: Demonstrates CI/CD principles with minimal complexity
+- **Fast Deployment**: From generation to live in minutes
+
+## 🛠️ Tech Stack
+
+- [Ollama](https://ollama.com/) - For running Llama3.2 locally in CI environment
+- [Astro](https://astro.build/) - Fast, lightweight web framework
+- [TailwindCSS](https://tailwindcss.com/) - For styling
+- [GitHub Actions](https://github.com/features/actions) - For CI/CD automation
+- [GitHub Pages](https://pages.github.com/) - For hosting
+
+## 📁 Project Structure
+
+```
+├── .github/workflows        # GitHub Actions configuration
+│   └── deploy.yml           # Main workflow file
+├── src
+│   ├── components           # Astro components
+│   ├── layouts              # Page layouts
+│   ├── pages                # Website routes
+│   ├── phrases              # Generated motivational phrases
+│   │   └── YYYY-MM-DD.md    # One file per day
+│   ├── styles               # CSS files
+│   └── utils                # Helper functions
+├── public                   # Static assets
+├── astro.config.mjs         # Astro configuration
+└── package.json             # Dependencies
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## 🔄 How the Workflow Runs
 
-## 🧞 Commands
+1. **Scheduled Trigger**: At midnight UTC every day
+2. **Manual Trigger**: On push to main branch or manual dispatch
+3. **Sequential Jobs**: Each job waits for the previous one to complete
+4. **Permissions Control**: Minimal permissions for security
 
-All commands are run from the root of the project, from a terminal:
+## 🧩 Extending the Demo
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `yarn install`             | Installs dependencies                            |
-| `yarn dev`             | Starts local dev server at `localhost:4321`      |
-| `yarn build`           | Build your production site to `./dist/`          |
-| `yarn preview`         | Preview your build locally, before deploying     |
-| `yarn astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `yarn astro -- --help` | Get help using the Astro CLI                     |
+You can adapt this pattern for various use cases:
 
-## 👀 Want to learn more?
+- Generate blog post ideas
+- Create daily statistics or reports
+- Update documentation based on code changes
+- Produce daily artwork or visualizations
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 📚 Getting Started
+
+To run this project locally:
+
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Run the development server with `npm run dev`
+
+To set up your own version:
+
+1. Fork this repository
+2. Update the `astro.config.mjs` with your GitHub username
+3. Enable GitHub Pages in your repository settings
+4. Ensure GitHub Actions permissions are configured correctly
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## 📝 License
+
+MIT
+
+---
+
+Made with ❤️ and O
