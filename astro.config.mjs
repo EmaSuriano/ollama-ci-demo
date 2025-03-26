@@ -7,6 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://emasuriano.github.io",
   base: "ollama-ci-demo",
+  prefetch: true,
 
   vite: {
     plugins: [tailwindcss()],
