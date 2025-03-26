@@ -1,0 +1,13 @@
+---
+import Welcome from "../components/Welcome.astro";
+import Layout from "../layouts/Layout.astro";
+import { getEntry } from "astro:content";
+
+const today = new Date();
+const todayString = today.toISOString().split("T")[0];
+const phrase = await getEntry("phrases", todayString);
+---
+
+<Layout>
+  <Welcome phrase={phrase?.body || "NOT FOUND"} />
+</Layout>
