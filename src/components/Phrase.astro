@@ -17,7 +17,6 @@ type Props = {
 const { phrase, author, date } = Astro.props;
 const today = new Date();
 
-const isToday = isSameDay(today, date);
 const formattedDate = formatDate(date);
 
 const previousDay = getDateId(getPreviousDay(date));
@@ -66,17 +65,6 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
       >
         ←
       </a>
-
-      {
-        !isToday && (
-          <a
-            href="/ollama-ci-demo"
-            class="text-xs uppercase tracking-wide text-gray-400 hover:text-gray-800 transition-colors"
-          >
-            Today
-          </a>
-        )
-      }
 
       <a
         class={`transition-colors ${
