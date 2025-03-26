@@ -26,7 +26,7 @@ jobs:
       - name: Run LLM
         run: |
           DATE=$(date +'%Y-%m-%d')
-          ollama run llama3.2 'What is a large language model?' > "./src/phrases/$DATE.md"
+          ollama run llama3.2 'Give me an inspirational phrase' > "./src/phrases/$DATE.md"
 
       - uses: stefanzweifel/git-auto-commit-action@v5
 
@@ -42,6 +42,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
