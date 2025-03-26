@@ -1,13 +1,13 @@
 ---
-import Welcome from "../components/Welcome.astro";
+import Phrase from "../components/Phrase.astro";
 import Layout from "../layouts/Layout.astro";
 import { getEntry } from "astro:content";
+import { getDateId } from "../utils/date";
 
 const today = new Date();
-const todayString = today.toISOString().split("T")[0];
-const phrase = await getEntry("phrases", todayString);
+const phrase = await getEntry("phrases", getDateId(today));
 ---
 
 <Layout>
-  <Welcome phrase={phrase?.body || "NOT FOUND"} />
+  <Phrase phrase={phrase?.body || "NOT FOUND"} author="Ollama" date={today} />
 </Layout>

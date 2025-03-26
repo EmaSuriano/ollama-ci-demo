@@ -1,0 +1,22 @@
+---
+import Phrase from "../../components/Phrase.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getCollection, getEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const phrases = await getCollection("phrases");
+
+  return phrases.map((date) => ({ params: { id: date.id } }));
+}
+
+const { id } = Astro.params;
+const phrase = await getEntry("phrases", id);
+---
+
+<Layout>
+  <Phrase
+    phrase={phrase?.body || "NOT FOUND"}
+    author="Ollama"
+    date={new Date(id)}
+  />
+</Layout>
