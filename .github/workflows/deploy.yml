@@ -24,14 +24,7 @@ jobs:
         run: curl -fsSL https://ollama.com/install.sh | bash
 
       - name: Run LLM
-        run: |
-          DATE=$(date +'%Y-%m-%d')
-          FILE_PATH="./src/phrases/$DATE.md"
-
-          # Avoid running the command if the file already exists
-          if [ ! -f "$FILE_PATH" ]; then
-          ollama run llama3.2 'Give me an inspirational phrase, just the phrase without the author' > "$FILE_PATH"
-          fi
+        run: ./run-llm.sh
 
       - uses: stefanzweifel/git-auto-commit-action@v5
 
