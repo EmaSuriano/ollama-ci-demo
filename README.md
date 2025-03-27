@@ -15,7 +15,7 @@ Visit the [live demo site](https://emasuriano.github.io/ollama-ci-demo) to see t
 
 | Dark                                                                                     | Light                                                                                     |
 | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![Dark](https://github.com/user-attachments/assets/6e258cdd-4b4f-497d-a925-17f3b1a062bc) | ![Light](https://github.com/user-attachments/assets/07323868-7446-47ef-a627-c90426e79e9c) |
+| ![Dark](https://github.com/user-attachments/assets/07323868-7446-47ef-a627-c90426e79e9c) | ![Light](https://github.com/user-attachments/assets/6e258cdd-4b4f-497d-a925-17f3b1a062bc) |
 
 ## ⚙️ How It Works
 
