@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from "astro:transitions";
+
 import "../styles/global.css";
 ---
 
@@ -10,6 +12,7 @@ import "../styles/global.css";
     <link rel="icon" type="image/svg+xml" href="/ollama-ci-demo/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Daily Motivation</title>
+    <ClientRouter />
   </head>
   <body>
     <slot />
