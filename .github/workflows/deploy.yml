@@ -27,6 +27,8 @@ jobs:
         run: ./run-llm.sh
 
       - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Add phrase of the day
 
   build:
     needs: ollama
@@ -34,6 +36,9 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
       - name: Install, build, and upload your site
         uses: withastro/action@v3
 
