@@ -5,7 +5,6 @@ import {
   getDateId,
   getNextDay,
   getPreviousDay,
-  isSameDay,
 } from "../utils/date";
 
 type Props = {
@@ -15,7 +14,6 @@ type Props = {
 };
 
 const { phrase, author, date } = Astro.props;
-const today = new Date();
 
 const formattedDate = formatDate(date);
 
@@ -62,6 +60,7 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
           ? `/ollama-ci-demo/past/${previousDay}`
           : undefined}
         aria-label="Previous day"
+        id="previous-link"
       >
         ←
       </a>
@@ -74,6 +73,7 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
         }`}
         href={nextDayPhrase ? `/ollama-ci-demo/past/${nextDay}` : undefined}
         aria-label="Next day"
+        id="next-link"
       >
         →
       </a>
@@ -118,3 +118,23 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
     </div>
   </footer>
 </div>
+
+<script>
+  // Keyboard navigation for next and previous links
+  document.addEventListener("keydown", (event) => {
+    const getLink = (id: string) => {
+      const elem = document.getElementById(id);
+      return elem && "href" in elem && elem.href ? elem : null;
+    };
+
+    if (event.key === "ArrowLeft") {
+      const previousLink = getLink("previous-link");
+      previousLink?.click();
+    }
+
+    if (event.key === "ArrowRight") {
+      const previousLink = getLink("next-link");
+      previousLink?.click();
+    }
+  });
+</script>
