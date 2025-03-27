@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+
 import { getEntry } from "astro:content";
 import {
   formatDate,
@@ -29,6 +32,8 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
   <main
     class="flex-grow container mx-auto px-4 py-16 flex flex-col items-center justify-center"
   >
+    <Image src={logo} alt="Llama logo" class="w-80 h-80 mb-10" />
+
     {/* Date Display */}
     <div class="mb-12 text-center">
       <p class="text-base text-gray-500 dark:text-gray-400">
