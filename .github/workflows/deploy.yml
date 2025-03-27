@@ -30,7 +30,7 @@ jobs:
 
           # Avoid running the command if the file already exists
           if [ ! -f "$FILE_PATH" ]; then
-          ollama run llama3.2 'Give me an inspirational phrase' > "$FILE_PATH"
+          ollama run llama3.2 'Give me an inspirational phrase, just the phrase without the author' > "$FILE_PATH"
           fi
 
       - uses: stefanzweifel/git-auto-commit-action@v5
