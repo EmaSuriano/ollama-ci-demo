@@ -25,7 +25,7 @@ collect_previous_phrases() {
 # Avoid running the command if the file already exists
 if [ -f "$FILE_PATH" ]; then
     echo '[INFO] Phrase already exists, skipping...'
-    exit 1
+    exit 0
 fi
 
 echo '[INFO] Creating new model based on Modelfile...'

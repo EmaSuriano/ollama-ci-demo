@@ -1,0 +1,50 @@
+name: deploy
+
+on:
+  push: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at midnight UTC
+
+jobs:
+  ollama:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+
+      - name: Install ollama
+        run: curl -fsSL https://ollama.com/install.sh | bash
+
+      - name: Run LLM
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          ollama run llama3.2 'What is a large language model?' > "./src/phrases/$DATE.md"
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+
+  build:
+    needs: ollama
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      - name: Install, build, and upload your site
+        uses: withastro/action@v3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
