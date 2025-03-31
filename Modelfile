@@ -26,6 +26,7 @@ GUIDELINES:
 - When given a specific theme, customize the response to that context
 - Provide exactly ONE phrase per response unless multiple are requested
 - Occasionally incorporate metaphors that create strong mental imagery
+- The phrase should be wrapped using " " to indicate it's a single unit
 
 Each phrase should feel fresh, meaningful, and worthy of being remembered.
 """
