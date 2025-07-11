@@ -4,7 +4,7 @@ This repository demonstrates how to integrate [Ollama](https://ollama.com/) into
 
 ## 🌟 Project Overview
 
-Every day at midnight UTC, this project:
+Every Monday at 00:00, this project:
 
 1. Uses GitHub Actions to run Ollama with the Llama3.2 model
 2. Generates a new inspirational phrase
