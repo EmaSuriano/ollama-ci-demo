@@ -1,14 +1,9 @@
 ---
-import { Image } from "astro:assets";
-import logo from "../assets/logo.png";
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
 
-import { getEntry } from "astro:content";
-import {
-  formatDate,
-  getDateId,
-  getNextDay,
-  getPreviousDay,
-} from "../utils/date";
+import { getCollection } from 'astro:content';
+import { formatDate } from '../utils/date';
 
 type Props = {
   phrase: string;
@@ -18,13 +13,11 @@ type Props = {
 
 const { phrase, author, date } = Astro.props;
 
+const phrases = await getCollection('phrases');
+const previousPhrase = phrases.findLast((curr) => new Date(curr.id) < date);
+const nextPhrase = phrases.find((curr) => new Date(curr.id) > date);
+
 const formattedDate = formatDate(date);
-
-const previousDay = getDateId(getPreviousDay(date));
-const previousDayPhrase = await getEntry("phrases", previousDay);
-
-const nextDay = getDateId(getNextDay(date));
-const nextDayPhrase = await getEntry("phrases", nextDay);
 ---
 
 <div class="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
@@ -62,12 +55,12 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
     <div class="flex items-center justify-center space-x-8 mb-16">
       <a
         class={`transition-colors ${
-          previousDayPhrase
-            ? "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-            : "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+          previousPhrase
+            ? 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+            : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
         }`}
-        href={previousDayPhrase
-          ? `/ollama-ci-demo/past/${previousDay}`
+        href={previousPhrase
+          ? `/ollama-ci-demo/past/${previousPhrase.id}`
           : undefined}
         aria-label="Previous day"
         id="previous-link"
@@ -77,11 +70,11 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
 
       <a
         class={`transition-colors ${
-          nextDayPhrase
-            ? "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-            : "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+          nextPhrase
+            ? 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+            : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
         }`}
-        href={nextDayPhrase ? `/ollama-ci-demo/past/${nextDay}` : undefined}
+        href={nextPhrase ? `/ollama-ci-demo/past/${nextPhrase.id}` : undefined}
         aria-label="Next day"
         id="next-link"
       >
@@ -134,19 +127,19 @@ const nextDayPhrase = await getEntry("phrases", nextDay);
 
 <script>
   // Keyboard navigation for next and previous links
-  document.addEventListener("keydown", (event) => {
+  document.addEventListener('keydown', (event) => {
     const getLink = (id: string) => {
       const elem = document.getElementById(id);
-      return elem && "href" in elem && elem.href ? elem : null;
+      return elem && 'href' in elem && elem.href ? elem : null;
     };
 
-    if (event.key === "ArrowLeft") {
-      const previousLink = getLink("previous-link");
+    if (event.key === 'ArrowLeft') {
+      const previousLink = getLink('previous-link');
       previousLink?.click();
     }
 
-    if (event.key === "ArrowRight") {
-      const previousLink = getLink("next-link");
+    if (event.key === 'ArrowRight') {
+      const previousLink = getLink('next-link');
       previousLink?.click();
     }
   });

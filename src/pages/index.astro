@@ -1,13 +1,17 @@
 ---
-import Phrase from "../components/Phrase.astro";
-import Layout from "../layouts/Layout.astro";
-import { getEntry } from "astro:content";
-import { getDateId } from "../utils/date";
+import Phrase from '../components/Phrase.astro';
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
 const today = new Date();
-const phrase = await getEntry("phrases", getDateId(today));
+const phrases = await getCollection('phrases');
+const phrase = phrases.findLast((curr) => new Date(curr.id) <= today);
 ---
 
 <Layout>
-  <Phrase phrase={phrase?.body || "NOT FOUND"} author="Ollama" date={today} />
+  <Phrase
+    phrase={phrase?.body || 'NOT FOUND'}
+    author="Ollama"
+    date={phrase ? new Date(phrase.id) : today}
+  />
 </Layout>
