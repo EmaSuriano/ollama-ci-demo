@@ -8,17 +8,21 @@ MODEL_FILE='./Modelfile'
 
 # Function to collect all previous phrases and return them as a string
 collect_previous_phrases() {
+    local N=20  # Number of recent phrases to keep
     local all_phrases=""
-    
+
     if [ -d "$PHRASES_DIR" ]; then
-        for file in "$PHRASES_DIR"/*.md; do
+        # List all .md files by date (sorted), get the last N
+        recent_files=$(ls "$PHRASES_DIR"/*.md 2>/dev/null | sort | tail -n "$N")
+        
+        for file in $recent_files; do
             if [ -f "$file" ]; then
                 content=$(cat "$file")
                 all_phrases+=$'\n'"$content"
             fi
         done
     fi
-    
+
     echo "$all_phrases"
 }
 
@@ -32,16 +36,35 @@ echo '[INFO] Creating new model based on Modelfile...'
 ollama create $MODEL -f $MODEL_FILE
 
 ALL_PREVIOUS_PHRASES=$(collect_previous_phrases)
-PROMPT=$(cat <<EOF
-Give me an inspirational phrase, just the phrase without the author.
-Try to avoid repeating the same phrases as before:
-$ALL_PREVIOUS_PHRASES
-EOF
-)
+echo $ALL_PREVIOUS_PHRASES
 
+THEMES=(
+  "resilience" "focus" "growth" "courage" "clarity" "momentum" "discipline" "confidence"
+  "fearlessness" "transformation" "patience" "consistency" "grit" "vision" "self-worth"
+  "initiative" "action" "perseverance" "adaptability" "calm" "inner fire" "strength"
+  "presence" "persistence" "hope" "determination" "boldness" "recovery" "renewal"
+  "purpose" "tenacity" "intention" "leadership" "self-trust"
+)
+RANDOM_THEME=${THEMES[$RANDOM % ${#THEMES[@]}]}
+
+
+PROMPT="Write a poetic motivational phrase, rich in metaphor, fresh in tone, and under 25 words. Wrap it in quotes.\n\n"
+PROMPT+="Today's theme is: $RANDOM_THEME.\n\n"
+PROMPT+="Try to avoid repeating the same phrases as before:\n"
+PROMPT+="$ALL_PREVIOUS_PHRASES"
 
 echo '[INFO] Generating new phrase...'
 echo "$PROMPT"
 
+RAW_OUTPUT=$(ollama run $MODEL "$PROMPT")
 
-ollama run "$MODEL" "$PROMPT" > "$FILE_PATH"
+# Extract only the content between the first pair of double quotes
+PHRASE=$(echo "$RAW_OUTPUT" | grep -o '".\{1,\}"' | head -n 1)
+
+# If nothing is found, fall back to raw output (as a safety net)
+if [ -z "$PHRASE" ]; then
+    PHRASE="$RAW_OUTPUT"
+fi
+
+# Save final phrase to the file
+echo "$PHRASE" > "$FILE_PATH"
